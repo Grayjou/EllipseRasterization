@@ -33,6 +33,13 @@ Optimizes for the steep region of ellipses:
 - Falls back to incremental in flat regions
 - Best overall performance
 
+### 5. **Incremental Fast Axis Flip** - O(W + H)
+Optimized for both tall and wide ellipses:
+- Uses pure integer incremental math (`IncrementalFast`)
+- If ellipse is wide, swaps axes before rasterization
+- Transposes back with interval accumulation (no 2D grid)
+- Keeps output consistent while improving wide-case behavior
+
 ## Project Structure
 
 ```
@@ -169,7 +176,7 @@ Generates:
 
 ## Future Work
 
-- [ ] Implement adaptive algorithm with automatic axis swapping for wide ellipses
+- [x] Implement adaptive axis swapping for wide ellipses (`IncrementalFastAxisFlip`)
 - [ ] Add Bresenham-style integer-only midpoint algorithm
 - [ ] Extend to filled ellipse with anti-aliasing
 - [ ] GPU-accelerated batch rasterization

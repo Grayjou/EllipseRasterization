@@ -39,6 +39,7 @@ void verify_consistency()
         {"Direct", generate_ellipse_heights_direct},
         {"Incremental", generate_ellipse_heights_incremental},
         {"IncrementalFast", generate_ellipse_heights_incremental_fast},
+        {"IncrementalFastAxisFlip", generate_ellipse_heights_incremental_fast_axis_flip},
         {"Hybrid", generate_ellipse_heights_hybrid},
         {"IncrementalReverse", generate_ellipse_heights_incremental_reverse},
         {"IncrementalReverseFast", generate_ellipse_heights_incremental_reverse_fast}
@@ -107,56 +108,29 @@ void demonstrate_rasterization()
     
     std::cout << "Ellipse: " << two_a << "x" << two_b << "\n";
     std::cout << "Total filled points: " << raster.filled_points.size() << "\n";
-    std::cout << "Thin outline points (8-way): " << raster.thin_outline.size() << "\n";
-    std::cout << "Thick outline points (4-way): " << raster.thick_outline.size() << "\n";
+    std::cout << "Thin outline points (8-connected): " << raster.thin_outline.size() << "\n";
+    std::cout << "Full outline points (4-connected): " << raster.thick_outline.size() << "\n";
     
-    // Print a few sample points
-    std::cout << "\nFirst 10 filled points:\n";
-    for (size_t i = 0; i < std::min(size_t(10), raster.filled_points.size()); i++) {
-        const auto& [x, y] = raster.filled_points[i];
-        std::cout << "  (" << x << ", " << y << ")\n";
-    }
+    // Show outlines
+    std::cout << "\n--- Thin outline (8-connected, thinner band) ---\n";
+    std::cout << "  Legend: \xE2\x96\x88\xE2\x96\x88 = outline, \xE2\x96\x91\xE2\x96\x91 = interior\n\n";
+    print_thin_outline_ascii(full_heights);
     
-    std::cout << "\nFirst 10 thin outline points:\n";
-    for (size_t i = 0; i < std::min(size_t(10), raster.thin_outline.size()); i++) {
-        const auto& [x, y] = raster.thin_outline[i];
-        std::cout << "  (" << x << ", " << y << ")\n";
-    }
+    std::cout << "\n--- Full outline (4-connected, thicker band) ---\n";
+    std::cout << "  Legend: \xE2\x96\x88\xE2\x96\x88 = outline, \xE2\x96\x91\xE2\x96\x91 = interior\n\n";
+    print_full_outline_ascii(full_heights);
     
-    // Visualization
-    if (!raster.filled_points.empty()) {
-        int min_x = raster.filled_points[0].first;
-        int max_x = raster.filled_points[0].first;
-        int min_y = raster.filled_points[0].second;
-        int max_y = raster.filled_points[0].second;
-        
-        std::set<Point> filled_set(raster.filled_points.begin(), raster.filled_points.end());
-        std::set<Point> thin_set(raster.thin_outline.begin(), raster.thin_outline.end());
-        std::set<Point> thick_set(raster.thick_outline.begin(), raster.thick_outline.end());
-        
-        for (const auto& [x, y] : raster.filled_points) {
-            min_x = std::min(min_x, x);
-            max_x = std::max(max_x, x);
-            min_y = std::min(min_y, y);
-            max_y = std::max(max_y, y);
-        }
-        
-        std::cout << "\nVisualization (█=thin outline, ▓=thick outline, ░=interior):\n\n";
-        for (int y = max_y; y >= min_y; y--) {
-            for (int x = min_x; x <= max_x; x++) {
-                if (thin_set.count({x, y})) {
-                    std::cout << "█ ";
-                } else if (thick_set.count({x, y})) {
-                    std::cout << "▓ ";
-                } else if (filled_set.count({x, y})) {
-                    std::cout << "░ ";
-                } else {
-                    std::cout << "  ";
-                }
-            }
-            std::cout << "\n";
-        }
-    }
+    std::cout << "\n--- Combined view ---\n";
+    std::cout << "  Legend: \xE2\x96\x88\xE2\x96\x88 = full outline, \xE2\x96\x93\xE2\x96\x93 = thin-only, \xE2\x96\x91\xE2\x96\x91 = interior\n\n";
+    print_combined_ascii(full_heights);
+    
+    // Show a second example with different aspect ratio
+    std::cout << "\n\n--- Tall ellipse 10x20 ---\n\n";
+    auto [hh2, fh2] = generate_ellipse_heights_incremental_fast(10, 20);
+    std::cout << "Combined view:\n";
+    print_combined_ascii(fh2);
+    std::cout << "  Thin outline: " << heights_to_thin_outline(fh2).size() << " points\n";
+    std::cout << "  Full outline: " << heights_to_full_outline(fh2).size() << " points\n";
 }
 
 int main(int argc, char* argv[])
@@ -178,6 +152,7 @@ int main(int argc, char* argv[])
         {"Direct", generate_ellipse_heights_direct},
         {"Incremental", generate_ellipse_heights_incremental},
         {"IncrementalFast", generate_ellipse_heights_incremental_fast},
+        {"IncrementalFastAxisFlip", generate_ellipse_heights_incremental_fast_axis_flip},
         {"Hybrid", generate_ellipse_heights_hybrid},
         {"IncrementalReverse", generate_ellipse_heights_incremental_reverse},
         {"IncrementalReverseFast", generate_ellipse_heights_incremental_reverse_fast}

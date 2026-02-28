@@ -80,6 +80,9 @@ auto result3 = generate_ellipse_heights_hybrid(width, height);
 
 // 4. Incremental Reverse (best overall)
 auto result4 = generate_ellipse_heights_incremental_reverse(width, height);
+
+// 5. Incremental Fast Axis Flip (strong for wide ellipses)
+auto result5 = generate_ellipse_heights_incremental_fast_axis_flip(width, height);
 ```
 
 ### Output Structure

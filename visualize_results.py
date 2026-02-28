@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Visualize ellipse rasterization benchmark results.
-Generates heatmaps comparing algorithm performance.
+Visualize ellipse rasterization benchmark results and outline demonstrations.
+Generates heatmaps comparing algorithm performance and outline renderings.
 """
 
 import pandas as pd
@@ -9,6 +9,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent / "ports"))
+from ellipse_fast import (
+    generate_ellipse_heights_incremental_fast,
+    heights_to_filled,
+    heights_to_thin_outline,
+    heights_to_full_outline,
+)
 
 def load_results(csv_path='results/benchmark_results.csv'):
     """Load benchmark results from CSV."""
@@ -187,24 +195,146 @@ def print_statistics(df):
         print(f"  Max: {algo_data['Time_us'].max():.2f} μs")
         print()
 
+
+def create_outline_visualization(output_path='results/outline_comparison.png'):
+    """
+    Create a figure showing thin vs full outlines for several ellipse sizes.
+    Uses the Python port of IncrementalFast to generate heights.
+    """
+    test_cases = [
+        (20, 12, "20x12"),
+        (30, 20, "30x20"),
+        (15, 25, "15x25"),
+        (10, 10, "10x10"),
+    ]
+
+    fig, axes = plt.subplots(len(test_cases), 3, figsize=(18, 5 * len(test_cases)))
+
+    for row, (two_a, two_b, label) in enumerate(test_cases):
+        _, full_heights = generate_ellipse_heights_incremental_fast(two_a, two_b)
+        filled = heights_to_filled(full_heights)
+        thin   = heights_to_thin_outline(full_heights)
+        full   = heights_to_full_outline(full_heights)
+
+        filled_set = set(filled)
+        thin_set   = set(thin)
+        full_set   = set(full)
+
+        xs = [p[0] for p in filled]
+        ys = [p[1] for p in filled]
+        x_lo, x_hi = min(xs) - 1, max(xs) + 1
+        y_lo, y_hi = min(ys) - 1, max(ys) + 1
+        W = x_hi - x_lo + 1
+        H = y_hi - y_lo + 1
+
+        def make_grid(outline_set):
+            grid = np.zeros((H, W))
+            for (x, y) in filled:
+                grid[y_hi - y][x - x_lo] = 1  # interior
+            for (x, y) in outline_set:
+                grid[y_hi - y][x - x_lo] = 2  # outline
+            return grid
+
+        # Column 0: Thin outline
+        ax = axes[row][0]
+        grid = make_grid(thin_set)
+        cmap = plt.cm.colors.ListedColormap(['white', '#d0d0ff', '#2020a0'])
+        ax.imshow(grid, cmap=cmap, interpolation='nearest', aspect='equal')
+        ax.set_title(f'{label} — Thin outline (8-connected)\n{len(thin)} points', fontsize=11)
+        ax.set_xticks([]); ax.set_yticks([])
+        ax.grid(True, which='both', color='#cccccc', linewidth=0.3)
+
+        # Column 1: Full outline
+        ax = axes[row][1]
+        grid = make_grid(full_set)
+        cmap2 = plt.cm.colors.ListedColormap(['white', '#d0ffd0', '#20a020'])
+        ax.imshow(grid, cmap=cmap2, interpolation='nearest', aspect='equal')
+        ax.set_title(f'{label} — Full outline (4-connected)\n{len(full)} points', fontsize=11)
+        ax.set_xticks([]); ax.set_yticks([])
+        ax.grid(True, which='both', color='#cccccc', linewidth=0.3)
+
+        # Column 2: Combined
+        ax = axes[row][2]
+        grid = np.zeros((H, W))
+        for (x, y) in filled:
+            grid[y_hi - y][x - x_lo] = 1
+        for (x, y) in thin:
+            grid[y_hi - y][x - x_lo] = 2
+        for (x, y) in full:
+            grid[y_hi - y][x - x_lo] = 3
+        cmap3 = plt.cm.colors.ListedColormap(['white', '#e8e8e8', '#ffaa44', '#cc2222'])
+        ax.imshow(grid, cmap=cmap3, interpolation='nearest', aspect='equal')
+        ax.set_title(f'{label} — Combined\nred=full({len(full)}), orange=thin-only({len(thin)-len(full)}), gray=interior',
+                     fontsize=10)
+        ax.set_xticks([]); ax.set_yticks([])
+        ax.grid(True, which='both', color='#cccccc', linewidth=0.3)
+
+    plt.suptitle('Ellipse Outline Comparison: Thin (8-connected) vs Full (4-connected)',
+                 fontsize=16, fontweight='bold', y=0.995)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=200, bbox_inches='tight')
+    print(f"Outline comparison saved to {output_path}")
+    plt.close()
+
+
+def create_outline_only_visualization(output_path='results/outline_only.png'):
+    """
+    Show just the outline pixels (no fill) for thin and full, side by side.
+    """
+    test_cases = [
+        (30, 20, "30x20"),
+        (40, 30, "40x30"),
+        (20, 35, "20x35"),
+    ]
+
+    fig, axes = plt.subplots(len(test_cases), 2, figsize=(14, 5 * len(test_cases)))
+
+    for row, (two_a, two_b, label) in enumerate(test_cases):
+        _, full_heights = generate_ellipse_heights_incremental_fast(two_a, two_b)
+        thin = heights_to_thin_outline(full_heights)
+        full = heights_to_full_outline(full_heights)
+
+        for col, (pts, name, color) in enumerate([
+            (full,"Thin (8-conn)", '#2020a0'),
+            (thin, "Full (4-conn)", '#20a020'),
+        ]):
+            ax = axes[row][col]
+            if pts:
+                xs = [p[0] for p in pts]
+                ys = [p[1] for p in pts]
+                ax.scatter(xs, ys, s=30, c=color, marker='s', edgecolors='none')
+                ax.set_aspect('equal')
+                ax.invert_yaxis()
+            ax.set_title(f'{label} — {name} ({len(pts)} pts)', fontsize=12)
+            ax.grid(True, alpha=0.3)
+
+    plt.suptitle('Outline-Only View', fontsize=16, fontweight='bold', y=0.995)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=200, bbox_inches='tight')
+    print(f"Outline-only visualization saved to {output_path}")
+    plt.close()
+
 if __name__ == '__main__':
-    # Load results
+    # Always generate outline visualizations (no benchmark data needed)
+    create_outline_visualization()
+    create_outline_only_visualization()
+    
+    # Load benchmark results if available
     csv_path = Path('results/benchmark_results.csv')
     
-    if not csv_path.exists():
-        print(f"Error: {csv_path} not found!")
-        print("Please run the C++ benchmark first to generate results.")
-        exit(1)
-    
-    df = load_results(csv_path)
-    
-    # Generate visualizations
-    create_heatmaps(df)
-    create_comparison_plot(df)
-    create_relative_heatmaps(df)
-    create_speedup_analysis(df)
-    
-    # Print statistics
-    print_statistics(df)
+    if csv_path.exists():
+        df = load_results(csv_path)
+        
+        # Generate benchmark visualizations
+        create_heatmaps(df)
+        create_comparison_plot(df)
+        create_relative_heatmaps(df)
+        create_speedup_analysis(df)
+        
+        # Print statistics
+        print_statistics(df)
+    else:
+        print(f"Note: {csv_path} not found — skipping benchmark visualizations.")
+        print("Run the C++ benchmark to generate benchmark_results.csv.")
     
     print("\n✓ All visualizations generated successfully!")

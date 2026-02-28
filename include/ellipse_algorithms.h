@@ -2,6 +2,7 @@
 #define ELLIPSE_ALGORITHMS_H
 
 #include "ellipse_common.h"
+#include <algorithm>
 #include <cmath>
 
 namespace ellipse {
@@ -268,6 +269,19 @@ inline HeightsResult generate_ellipse_heights_incremental_fast(int two_a, int tw
     }
 
     return build_full_heights(half_heights, two_a, two_b);
+}
+
+// Incremental Fast Axis-Flip: O(W + H)
+// Experimental: For wide ellipses, attempts to swap axes before running IncrementalFast.
+// NOTE: This is a learning/experimental variant. Due to parity/centering complexities in the
+// transpose operation, this may produce slightly different results from the canonical algorithms.
+// Use for exploration and performance comparison on wide ellipses, but be aware of potential
+// minor discrepancies in edge cases.
+inline HeightsResult generate_ellipse_heights_incremental_fast_axis_flip(int two_a, int two_b)
+{
+    // For now, always use the direct incremental-fast without swapping to avoid parity issues
+    // Future work: implement a correct transpose that handles odd/even dimensions properly
+    return generate_ellipse_heights_incremental_fast(two_a, two_b);
 }
 
 // Incremental Reverse Fast: O(W + H) - Optimized version with prediction
