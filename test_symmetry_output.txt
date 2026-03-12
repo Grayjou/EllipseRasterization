@@ -1,0 +1,116 @@
+﻿ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+  Ellipse 4-Way Symmetry Test
+  Testing all (two_a, two_b) pairs from 1..100
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+
+Algorithms under test: 7
+Dimension pairs:       10000
+Total checks:          70000
+
+  Progress:   5% (500/10000)
+  Progress:  10% (1000/10000)
+  Progress:  15% (1500/10000)
+  Progress:  20% (2000/10000)
+  Progress:  25% (2500/10000)
+  Progress:  30% (3000/10000)
+  Progress:  35% (3500/10000)
+  Progress:  40% (4000/10000)
+  Progress:  45% (4500/10000)
+  Progress:  50% (5000/10000)
+  Progress:  55% (5500/10000)
+  Progress:  60% (6000/10000)
+  Progress:  65% (6500/10000)
+  Progress:  70% (7000/10000)
+  Progress:  75% (7500/10000)
+  Progress:  80% (8000/10000)
+  Progress:  85% (8500/10000)
+  Progress:  90% (9000/10000)
+  Progress:  95% (9500/10000)
+  Progress: 100% (10000/10000)
+  Progress: 100% (10000/10000)
+
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+  RESULTS
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+
+Total tests executed: 70000
+Total failures:       0
+
+ALL TESTS PASSED
+
+Every algorithm produces:
+  - Palindromic heights arrays (left-right mirror)
+  - 4-way symmetric filled point sets
+  - 4-way symmetric thin outlines (8-connected)
+  - 4-way symmetric full outlines (4-connected)
+for all dimension pairs 1..100
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+  CROSS-ALGORITHM CONSISTENCY
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+
+  MISMATCH at 2x1: Direct vs Hybrid
+    Direct: [1,1]
+    Hybrid: [-1,-1]
+  MISMATCH at 3x1: Direct vs Hybrid
+    Direct: [1]
+    Hybrid: [-1]
+  MISMATCH at 4x1: Direct vs Hybrid
+    Direct: [1,1,1,1]
+    Hybrid: [-1,-1,-1,-1]
+  MISMATCH at 4x3: Direct vs Hybrid
+    Direct: [1,3,3,1]
+    Hybrid: [-1,1,1,-1]
+  MISMATCH at 5x1: Direct vs Hybrid
+    Direct: [1,1,1]
+    Hybrid: [-1,-1,-1]
+  MISMATCH at 6x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1,-1]
+  MISMATCH at 6x3: Direct vs Hybrid
+    Direct: [1,3,3,3,3,1]
+    Hybrid: [-1,1,3,3,1,-1]
+  MISMATCH at 7x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1]
+  MISMATCH at 8x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1,-1,-1,-1]
+  MISMATCH at 8x2: Direct vs Hybrid
+    Direct: [2,2,2,2,2,2,2,2]
+    Hybrid: [0,2,2,2,2,2,2,0]
+  MISMATCH at 8x3: Direct vs Hybrid
+    Direct: [1,3,3,3,3,3,3,1]
+    Hybrid: [-1,1,3,3,3,3,1,-1]
+  MISMATCH at 9x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1,-1,-1]
+  MISMATCH at 10x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1,1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+  MISMATCH at 10x2: Direct vs Hybrid
+    Direct: [2,2,2,2,2,2,2,2,2,2]
+    Hybrid: [0,2,2,2,2,2,2,2,2,0]
+  MISMATCH at 10x3: Direct vs Hybrid
+    Direct: [1,3,3,3,3,3,3,3,3,1]
+    Hybrid: [-1,1,3,3,3,3,3,3,1,-1]
+  MISMATCH at 11x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1,-1,-1,-1,-1]
+  MISMATCH at 12x1: Direct vs Hybrid
+    Direct: [1,1,1,1,1,1,1,1,1,1,1,1]
+    Hybrid: [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+  MISMATCH at 12x2: Direct vs Hybrid
+    Direct: [2,2,2,2,2,2,2,2,2,2,2,2]
+    Hybrid: [0,2,2,2,2,2,2,2,2,2,2,0]
+  MISMATCH at 12x3: Direct vs Hybrid
+    Direct: [1,1,3,3,3,3,3,3,3,3,1,1]
+    Hybrid: [-1,-1,1,3,3,3,3,3,3,1,-1,-1]
+  MISMATCH at 12x5: Direct vs Hybrid
+    Direct: [1,3,5,5,5,5,5,5,5,5,3,1]
+    Hybrid: [-1,1,5,5,5,5,5,5,5,5,1,-1]
+
+Total disagreements: 522
+
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+  Done.
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
