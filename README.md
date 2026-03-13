@@ -12,7 +12,7 @@ This project implements and benchmarks five distinct approaches to ellipse raste
 
 ## Summary
 
-Among the five algorithms evaluated, `IncrementalFastAxisFlip` (0.8314 μs) and `IncrementalFast` (0.8672 μs) consistently outperform the `Direct` baseline (1.0284 μs) by approximately 20% across a comprehensive 200×200 grid evaluation comprising 40,000 sample configurations. A sixth candidate, `IncrementalBinary`, was prototyped but ultimately excluded: because rasterized heights tend to lie near their respective upper bounds, the incremental linear scan required fewer iterations than the binary search in virtually all practical cases. Only at sizes on the order of 2000×2000 did the binary search variant approach competitive performance.
+Among the five algorithms evaluated, `IncrementalFastAxisFlip` ($0.8314\ \mu s$) and `IncrementalReverseFast` ($0.8672\ \mu s$) consistently outperform the `Direct` baseline ($1.0284\ \mu s$) by approximately 20% across a comprehensive $200 \times 200$ grid evaluation comprising 40,000 sample configurations. A sixth candidate, `IncrementalBinary`, was prototyped but ultimately excluded: because rasterized heights tend to lie near their respective upper bounds, the incremental linear scan required fewer iterations than the binary search in virtually all practical cases. Only at sizes on the order of $2000 \times 2000$ did the binary search variant approach competitive performance.
 
 The `Direct` algorithm is notably competitive relative to the simplicity of its implementation. The incremental family of algorithms, while faster in the best case, demands a more involved implementation, as it requires exploiting both the first and second discrete derivatives of the ellipse height function.
 
@@ -20,31 +20,31 @@ The `Direct` algorithm is notably competitive relative to the simplicity of its 
 
 ## Benchmark Results
 
-All benchmarks were conducted on ellipses ranging from 1×1 to 200×200, evaluating every integer combination within this range (40,000 unique configurations total), with five timed runs per configuration. Reported times are mean execution times in microseconds (μs) with standard deviation, along with the 1st and 5th percentiles.
+Benchmarks were conducted on ellipses ranging from $1 \times 1$ to $200 \times 200$, evaluating every integer combination within this range (40,000 unique configurations total), with five timed runs per configuration. Reported times are mean execution times in microseconds ($\mu s$) with standard deviation, along with the 1st and 5th percentiles.
 
-| Algorithm | Mean (μs) ± Std Dev | 1st Percentile | 5th Percentile |
-|---|---|---|---|
-| Direct | 1.0284 ± 0.3881 | 0.0230 | 0.4522 |
-| Hybrid | 1.2425 ± 0.4616 | 0.0220 | 0.4533 |
-| Incremental | 1.0809 ± 0.3644 | 0.0224 | 0.4505 |
-| IncrementalFast | 0.8672 ± 0.2824 | 0.0211 | 0.4344 |
-| IncrementalFastAxisFlip | 0.8314 ± 0.2689 | 0.0211 | 0.4262 |
-| IncrementalReverse | 1.0353 ± 0.3721 | 0.0226 | 0.4616 |
-| IncrementalReverseFast | 0.9288 ± 0.3159 | 0.0224 | 0.4459 |
+| Algorithm                | Mean ($\mu s$) $\pm$ Std Dev | 1st %ile | 5th %ile |
+|--------------------------|------------------------------|----------|----------|
+| Direct                   | $1.0284 \pm 0.3881$          | 0.0230   | 0.4522   |
+| Hybrid                   | $1.2425 \pm 0.4616$          | 0.0220   | 0.4533   |
+| Incremental              | $1.0809 \pm 0.3644$          | 0.0224   | 0.4505   |
+| IncrementalFast          | $0.8672 \pm 0.2824$          | 0.0211   | 0.4344   |
+| IncrementalFastAxisFlip  | $0.8314 \pm 0.2689$          | 0.0211   | 0.4262   |
+| IncrementalReverse       | $1.0353 \pm 0.3721$          | 0.0226   | 0.4616   |
+| IncrementalReverseFast   | $0.9288 \pm 0.3159$          | 0.0224   | 0.4459   |
 
 ### Benchmark Configuration
 
-- **Size range**: 1×1 to 200×200 (exhaustive sampling)
+- **Size range**: $1 \times 1$ to $200 \times 200$ (exhaustive sampling)
 - **Total configurations**: 40,000
 - **Runs per configuration**: 5
-- **Metric**: Mean execution time (μs)
+- **Metric**: Mean execution time ($\mu s$)
 - **Platform**: x64, MSVC with `/O2` optimization
 
 ---
 
 ## Algorithms Implemented
 
-### 1. Direct — O(W)
+### 1. Direct — $O(W)$
 
 Evaluates the ellipse equation directly using floating-point arithmetic:
 
@@ -54,7 +54,7 @@ Evaluates the ellipse equation directly using floating-point arithmetic:
 
 ---
 
-### 2. Incremental — O(W + H)
+### 2. Incremental — $O(W + H)$
 
 Exploits the monotonic property that rasterized heights increase toward the ellipse center:
 
@@ -64,17 +64,17 @@ Exploits the monotonic property that rasterized heights increase toward the elli
 
 ---
 
-### 3. Hybrid — O(W + H) *(currently produces heights with ±1 error; under repair)*
+### 3. Hybrid — $O(W + H)$ *(currently produces heights with $\pm 1$ error; under repair)*
 
 Combines incremental search with analytically derived derivative bounds:
 
-- Exploits the fact that $dy/dx$ is monotonically decreasing toward the center
+- Exploits the fact that $\frac{dy}{dx}$ is monotonically decreasing toward the center
 - Narrows the search interval using predictions based on the previous height differential
 - Performs a bounded linear search within the predicted range
 
 ---
 
-### 4. Incremental Reverse — O(W + H)
+### 4. Incremental Reverse — $O(W + H)$
 
 Optimizes traversal for the steep region of the ellipse:
 
@@ -85,7 +85,7 @@ Optimizes traversal for the steep region of the ellipse:
 
 ---
 
-### 5. Incremental Fast Axis Flip — O(W + H)
+### 5. Incremental Fast Axis Flip — $O(W + H)$
 
 Extends `IncrementalFast` to handle both tall and wide ellipses efficiently:
 
@@ -98,17 +98,23 @@ Extends `IncrementalFast` to handle both tall and wide ellipses efficiently:
 
 ## Theoretical Analysis of Derivative Bounds
 
-Let $q(x) = b\sqrt{1 - x^2/a^2}$ denote the continuous ellipse height function, and define the following:
+Let $q(x)$ denote the continuous ellipse height function:
 
-$$h_r(x) = \lfloor q(x) + 0.49 \rfloor \quad \text{(rasterized height)}$$
+$$q(x) = b\sqrt{1 - \frac{x^2}{a^2}}$$
 
-$$d_r(x) = h_r(x) - h_r(x - 1) \quad \text{(discrete finite difference)}$$
+Define the **rasterized height**:
+
+$$h_r(x) = \left\lfloor q(x) + 0.49 \right\rfloor$$
+
+And the **discrete finite difference**:
+
+$$d_r(x) = h_r(x) - h_r(x-1)$$
 
 ### Upper Bound
 
 The linear function
 
-$$U(x) = \frac{h_r(1 - a) + 1}{1 - a} \cdot x$$
+$$U(x) = \frac{h_r(1-a) + 1}{1 - a} \cdot x$$
 
 is a provable upper bound on $d_r(x)$ for $x \in [1-a,\ 0]$.
 
@@ -116,15 +122,20 @@ At small ellipse sizes, however, finite differences collapse to either zero or o
 
 ### Lower Bound
 
-The ellipse height function is steep over $[-a,\ -a/4]$ and nearly flat over $[-a/4,\ 0]$. Accordingly, a piecewise lower bound is defined as follows:
+The ellipse height function is steep over $[-a,\ -a/4]$ and nearly flat over $[-a/4,\ 0]$. Accordingly, a piecewise lower bound is defined:
 
-$$L(x) = \begin{cases} -\dfrac{h_r(1-a)}{1 + a/4}\left(x + \dfrac{3a}{4}\right), & x \in \left[1 - a,\ -\dfrac{3a}{4}\right] \\[10pt] \dfrac{2b}{3a\left(1 - \tfrac{3a}{4}\right)} \cdot x, & x \in \left[-\dfrac{3a}{4},\ 0\right] \end{cases}$$
+$$L(x) = \begin{cases} 
+\displaystyle -\frac{h_r(1-a)}{1 + \frac{a}{4}} \left( x + \frac{3a}{4} \right) & x \in \left[ 1-a,\ -\frac{3a}{4} \right] \\[16pt]
+\displaystyle \frac{2b}{3a \left( 1 - \frac{3a}{4} \right)} \cdot x & x \in \left[ -\frac{3a}{4},\ 0 \right]
+\end{cases}$$
 
-In the flat interval, the upper bound tightens further to $\frac{h_r(1-a)+1}{2(1-a)} \cdot x$.
+In the flat interval $\left[-\frac{3a}{4},\ 0\right]$, the upper bound tightens further to:
+
+$$U_{\text{tight}}(x) = \frac{h_r(1-a) + 1}{2(1-a)} \cdot x$$
 
 ### Practical Considerations
 
-These bounds offer a meaningful reduction in search iterations only when the aspect ratio $b/a$ is large. For $b/a \leq 6$, the lower bound is identically zero throughout the flat interval. Empirically, the naïve incremental approach performs between 3 and 6 iterations per column even at sizes as large as 20×120 — negligible relative to the overhead incurred by evaluating the bounds and performing the associated comparisons.
+These bounds offer a meaningful reduction in search iterations only when the aspect ratio $\frac{b}{a}$ is large. For $\frac{b}{a} \leq 6$, the lower bound is identically zero throughout the flat interval. Empirically, the naïve incremental approach performs between 3 and 6 iterations per column even at sizes as large as $20 \times 120$—negligible relative to the overhead incurred by evaluating the bounds and performing the associated comparisons.
 
 A meaningful benefit would require the naïve approach to incur on the order of 15 or more iterations per column, a regime that arises only in extremely elongated ellipses with large semi-major axes.
 
@@ -232,19 +243,19 @@ Visualization (█=thin outline, ▓=thick outline, ░=interior):
 
 ## Performance Summary
 
-| Algorithm | Time Complexity | Characteristic Use Case | Notes |
-|---|---|---|---|
-| Direct | O(W) | Predictable, general-purpose | Floating-point arithmetic |
-| Incremental | O(W + H) | Tall ellipses | Pure integer arithmetic |
-| Hybrid | O(W + H) | Balanced aspect ratios | Bounded search; currently under repair |
-| IncrementalReverse | O(W + H) | General use | Prediction with incremental fallback |
-| IncrementalFastAxisFlip | O(W + H) | Wide and tall ellipses | Axis transposition for wide-case optimization |
+| Algorithm              | Time Complexity | Characteristic Use Case   | Notes                                      |
+|------------------------|-----------------|---------------------------|--------------------------------------------|
+| Direct                 | $O(W)$          | Predictable, general-purpose | Floating-point arithmetic               |
+| Incremental            | $O(W + H)$      | Tall ellipses             | Pure integer arithmetic                    |
+| Hybrid                 | $O(W + H)$      | Balanced aspect ratios    | Bounded search; currently under repair     |
+| IncrementalReverse     | $O(W + H)$      | General use               | Prediction with incremental fallback       |
+| IncrementalFastAxisFlip| $O(W + H)$      | Wide and tall ellipses    | Axis transposition for wide-case optimization |
 
 ### Key Observations
 
-- `IncrementalFastAxisFlip` and `IncrementalFast` achieve the lowest mean execution times across the comprehensive 40,000-configuration test suite
-- `Direct` exhibits the most uniform performance profile, as its O(W) complexity is independent of ellipse height
-- All algorithms complete in sub-microsecond time for small ellipses (approximately 20×20)
+- `IncrementalFastAxisFlip` and `IncrementalReverseFast` achieve the lowest mean execution times across the comprehensive 40,000-configuration test suite
+- `Direct` exhibits the most uniform performance profile, as its $O(W)$ complexity is independent of ellipse height
+- All algorithms complete in sub-microsecond time for small ellipses (approximately $20 \times 20$)
 - Execution time scales near-linearly with ellipse perimeter across the tested configurations
 
 ---
